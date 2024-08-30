@@ -1,0 +1,46 @@
+<div *ngIf="facility" class="detail-container">
+    <h2>Facility Details</h2>
+    <div class="detail">
+      <label for="name">Name:</label>
+      <span>{{ facility.name }}</span>
+    </div>
+    <div class="detail">
+      <label for="description">Description:</label>
+      <span>{{ facility.description }}</span>
+    </div>
+    <div class="detail">
+      <label for="address">Address:</label>
+      <span>{{ facility.address }}</span>
+    </div>
+    <div class="detail">
+      <label for="city">City:</label>
+      <span>{{ facility.city }}</span>
+    </div>
+
+    <!-- Tabela za radne dane -->
+    <h3>Working Hours</h3>
+    <table *ngIf="workDays.length > 0" class="workday-table">
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let workDay of workDays">
+          <td>{{ workDay.day }}</td>
+          <td>{{ workDay.fromTime }}</td>
+          <td>{{ workDay.untilTime }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button (click)="scheduleVisit(facility.id)" class="btn btn-primary">Schedule Visit</button>
+    <button *ngIf="canReview" (click)="review(facility.id)" class="btn btn-primary">Review</button>
+
+</div>
+
+<div *ngIf="!facility">
+    <p>Loading...</p>
+</div>

@@ -1,0 +1,59 @@
+<div class="container">
+  <h2>Add Facility</h2>
+  <form (ngSubmit)="onSubmit()" #facilityForm="ngForm">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" [(ngModel)]="facility.name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" id="description" name="description" [(ngModel)]="facility.description">
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" id="address" name="address" [(ngModel)]="facility.address">
+    </div>
+    <div class="form-group">
+      <label for="city">City</label>
+      <input type="text" id="city" name="city" [(ngModel)]="facility.city">
+    </div>
+
+    <!-- Unos radnih dana -->
+    <div *ngFor="let workDay of facility.workDays; let i = index">
+      <h4>Work Day {{ i + 1 }}</h4>
+      <div class="form-group">
+        <label for="validFrom-{{i}}">Valid From</label>
+        <input type="date" id="validFrom-{{i}}" name="validFrom-{{i}}" [(ngModel)]="workDay.validFrom" required>
+      </div>
+      <div class="form-group">
+        <label for="day-{{i}}">Day of the Week</label>
+        <select id="day-{{i}}" name="day-{{i}}" [(ngModel)]="workDay.day" required>
+          <option *ngFor="let day of daysOfWeek" [value]="day">{{ day }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="fromTime-{{i}}">From Time</label>
+        <input type="time" id="fromTime-{{i}}" name="fromTime-{{i}}" [(ngModel)]="workDay.fromTime" required>
+      </div>
+      <div class="form-group">
+        <label for="untilTime-{{i}}">Until Time</label>
+        <input type="time" id="untilTime-{{i}}" name="untilTime-{{i}}" [(ngModel)]="workDay.untilTime" required>
+      </div>
+      <button type="button" class="btn btn-danger" (click)="removeWorkDay(i)">Remove Work Day</button>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="addWorkDay()">Add Work Day</button>
+
+    <!-- Unos disciplina -->
+    <div *ngFor="let discipline of facility.disciplines; let i = index">
+      <h4>Discipline {{ i + 1 }}</h4>
+      <div class="form-group">
+        <label for="disciplineName-{{i}}">Discipline Name</label>
+        <input type="text" id="disciplineName-{{i}}" name="disciplineName-{{i}}" [(ngModel)]="discipline.name" required>
+      </div>
+      <button type="button" class="btn btn-danger" (click)="removeDiscipline(i)">Remove Discipline</button>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="addDiscipline()">Add Discipline</button>
+
+    <button type="submit" class="btn btn-success">Add Facility</button>
+  </form>
+</div>

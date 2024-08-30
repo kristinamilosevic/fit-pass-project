@@ -1,0 +1,41 @@
+<form (ngSubmit)="onSubmit()">
+    <h1>Review</h1>
+
+    <div>
+        <p>Number of Exercises: {{ exerciseCount }}</p>
+      </div>
+      
+    <div>
+      <label for="equipment">Equipment Rating:</label>
+      <input id="equipment" type="number" [(ngModel)]="rate.equipment" name="equipment" min="0" max="10" required (ngModelChange)="checkRating()">
+    </div>
+
+    <div>
+      <label for="staff">Staff Rating:</label>
+      <input id="staff" type="number" [(ngModel)]="rate.staff" name="staff" min="0" max="10" required (ngModelChange)="checkRating()">
+    </div>
+
+    <div>
+      <label for="hygiene">Hygiene Rating:</label>
+      <input id="hygiene" type="number" [(ngModel)]="rate.hygiene" name="hygiene" min="0" max="10" required (ngModelChange)="checkRating()">
+    </div>
+
+    <div>
+      <label for="space">Space Rating:</label>
+      <input id="space" type="number" [(ngModel)]="rate.space" name="space" min="0" max="10" required (ngModelChange)="checkRating()">
+    </div>
+
+    <div>
+      <label for="commentText">Comment:</label>
+      <button type="button" class="comment-btn" (click)="toggleCommentInput()">Add Comment</button>
+      <div *ngIf="commentInputVisible">
+        <textarea id="commentText" [(ngModel)]="commentText" name="commentText" placeholder="Enter your comment here (optional)"></textarea>
+      </div>
+    </div>
+
+    <div *ngIf="ratingError" class="error-message">
+      Rating cannot exceed 10.
+    </div>
+
+    <button type="submit" [disabled]="ratingError">Submit Review</button>
+  </form>

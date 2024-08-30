@@ -1,0 +1,9 @@
+<nav>
+  <ul>
+    <li><button (click)="logout()" class="btn btn-primary">Logout</button></li>
+
+    <li *ngIf="isAdmin()">
+      <button (click)="createFacility()" class="btn btn-secondary">Create Facility</button>
+    </li>
+  </ul>
+</nav>

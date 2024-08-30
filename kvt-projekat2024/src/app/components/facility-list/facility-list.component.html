@@ -1,0 +1,46 @@
+<div class="search-container">
+  <h2>Search Facilities</h2>
+  <form (submit)="searchFacilities()">
+      <div class="form-group">
+          <label for="city">City</label>
+          <input type="text" id="city" [(ngModel)]="searchCriteria.city" name="city" placeholder="Enter city name">
+      </div>
+
+      <div class="form-group">
+          <label for="discipline">Discipline</label>
+          <input type="text" id="discipline" [(ngModel)]="searchCriteria.discipline" name="discipline" placeholder="Enter discipline">
+      </div>
+
+      <div class="form-group">
+          <label for="minRating">Min Rating</label>
+          <input type="number" id="minRating" [(ngModel)]="searchCriteria.minRating" name="minRating" placeholder="Minimum rating" step="0.1">
+      </div>
+
+      <div class="form-group">
+          <label for="maxRating">Max Rating</label>
+          <input type="number" id="maxRating" [(ngModel)]="searchCriteria.maxRating" name="maxRating" placeholder="Maximum rating" step="0.1">
+      </div>
+
+      <div class="form-group">
+          <label for="hasWorkDays">Has Work Days</label>
+          <input type="checkbox" id="hasWorkDays" [(ngModel)]="searchCriteria.hasWorkDays" name="hasWorkDays">
+      </div>
+
+      <button type="submit" class="search-button">Search</button>
+  </form>
+</div>
+
+<div>
+  <h2>Facilities</h2>
+  <ul>
+      <li *ngFor="let facility of facilities">
+          <a [routerLink]="['/facility-details', facility.id]">{{ facility.name }}</a> ({{ facility.city }}) ({{ facility.totalRating }})
+          <button *ngIf="userType === 'MANAGER' || userType === 'ADMIN'" (click)="editFacility(facility.id)">Edit</button>
+          <button *ngIf="userType === 'ADMIN'" (click)="deleteFacility(facility.id)">Delete</button>
+      </li>
+  </ul>
+
+  <div *ngIf="facilities.length === 0">
+      <p>No facilities available.</p>
+  </div>
+</div>

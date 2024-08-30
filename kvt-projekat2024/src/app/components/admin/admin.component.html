@@ -1,0 +1,24 @@
+<div *ngIf="pendingRequests.length > 0">
+    <h2>Pending Account Requests</h2>
+  
+    <ul>
+      <li *ngFor="let request of pendingRequests">
+        <p>Email: {{ request.email }}</p>
+        <p>Adresa: {{ request.address }}</p>
+        <button class="btn" (click)="approveRequest(request.id)">Odobri</button>
+        <button class="btn" (click)="rejectRequest(request.id)">Odbij</button>
+  
+        <div>
+          <label for="rejectionReason-{{ request.id }}">Razlog odbijanja:</label>
+          <input [(ngModel)]="rejectionReason" id="rejectionReason-{{ request.id }}" placeholder="Unesite razlog" />
+        </div>
+  
+        <hr />
+      </li>
+    </ul>
+  </div>
+  
+  <div *ngIf="pendingRequests.length === 0">
+    <p>Nema zahteva za odobravanje.</p>
+  </div>
+  

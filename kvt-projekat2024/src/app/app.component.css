@@ -1,0 +1,33 @@
+body, h1, p {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #F7E7DC;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between; /* Razmak između elemenata na krajevima */
+    align-items: center; /* Vertikalno poravnavanje elemenata */
+}
+
+header h1 {
+    font-size: 24px;
+    color: #405D72;
+}
+
+footer {
+    background-color: #F7E7DC;
+    padding: 10px 20px;
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+footer p {
+    margin: 0;
+    color: #333;
+}
+
+
