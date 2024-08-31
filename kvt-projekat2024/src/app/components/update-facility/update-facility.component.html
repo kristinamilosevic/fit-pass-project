@@ -1,27 +1,49 @@
 <div *ngIf="facility">
-    <h2>Update Facility</h2>
-    <form (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" [(ngModel)]="facility.name" name="name" required>
-      </div>
-      <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" id="description" [(ngModel)]="facility.description" name="description">
-      </div>
-      <div class="form-group">
-        <label for="address">Address</label>
-        <input type="text" id="address" [(ngModel)]="facility.address" name="address">
-      </div>
-      <div class="form-group">
-        <label for="city">City</label>
-        <input type="text" id="city" [(ngModel)]="facility.city" name="city">
-      </div>
-      <button type="submit" class="btn">Update Facility</button>
-    </form>
-  </div>
-  
-  <div *ngIf="!facility">
-    <p>Loading...</p>
-  </div>
-  
+  <h2>Update Facility</h2>
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" [(ngModel)]="facility.name" name="name" required>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" id="description" [(ngModel)]="facility.description" name="description">
+    </div>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <input type="text" id="address" [(ngModel)]="facility.address" name="address">
+    </div>
+    <div class="form-group">
+      <label for="city">City</label>
+      <input type="text" id="city" [(ngModel)]="facility.city" name="city">
+    </div>
+    
+     <!-- Disciplines Section -->
+     <div class="form-group">
+      <label>Disciplines</label>
+      <ul>
+        <li *ngFor="let discipline of facility.disciplines; let i = index">
+          <input type="text" [(ngModel)]="facility.disciplines[i].name" name="discipline{{i}}" placeholder="Discipline name">
+        </li>
+      </ul>
+    </div>
+
+    <!-- Work Days Section -->
+    <div class="form-group">
+      <label>Work Days</label>
+      <ul>
+        <li *ngFor="let workDay of facility.workDays; let i = index">
+          <input type="text" [(ngModel)]="facility.workDays[i].day" name="workDayDay{{i}}" placeholder="Day">
+          <input type="time" [(ngModel)]="facility.workDays[i].fromTime" name="workDayFromTime{{i}}" placeholder="From Time">
+          <input type="time" [(ngModel)]="facility.workDays[i].untilTime" name="workDayUntilTime{{i}}" placeholder="Until Time">
+        </li>
+      </ul>
+    </div>
+
+    <button type="submit" class="btn">Update Facility</button>
+  </form>
+</div>
+
+<div *ngIf="!facility">
+  <p>Loading...</p>
+</div>

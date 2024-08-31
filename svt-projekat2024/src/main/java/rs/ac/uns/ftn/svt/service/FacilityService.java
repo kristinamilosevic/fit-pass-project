@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FacilityService {
@@ -52,13 +53,11 @@ public class FacilityService {
 
         Facility savedFacility = facilityRepository.save(facility);
 
-        // Postavite radne dane
         for (FacilityDTO.WorkDayDTO workDayDTO : facilityDTO.getWorkDays()) {
             WorkDay workDay = new WorkDay();
             workDay.setValidFrom(workDayDTO.getValidFrom());
             workDay.setDay(workDayDTO.getDay());
 
-            // Osigurajte da je 'fromTime' ranije od 'untilTime'
             if (workDayDTO.getFromTime().isAfter(workDayDTO.getUntilTime())) {
                 throw new IllegalArgumentException("fromTime mora biti pre untilTime");
             }
@@ -70,7 +69,6 @@ public class FacilityService {
             workDayRepository.save(workDay);
         }
 
-        // Postavite discipline
         for (FacilityDTO.DisciplineDTO disciplineDTO : facilityDTO.getDisciplines()) {
             Discipline discipline = new Discipline();
             discipline.setName(disciplineDTO.getName());
@@ -82,26 +80,105 @@ public class FacilityService {
         return savedFacility;
     }
 
-    public Facility updateFacility(Long id, Facility updatedFacility) {
+    public FacilityDTO updateFacility(Long id, FacilityDTO updatedFacilityDTO) {
         Facility facility = facilityRepository.findById(id).orElse(null);
         if (facility == null) {
-            return null; // ili možete baciti izuzetak
+            return null;
         }
 
-        facility.setName(updatedFacility.getName());
-        facility.setDescription(updatedFacility.getDescription());
-        facility.setAddress(updatedFacility.getAddress());
-        facility.setCity(updatedFacility.getCity());
-        facility.setTotalRating(updatedFacility.getTotalRating());
-        facility.setActive(updatedFacility.isActive());
+        facility.setName(updatedFacilityDTO.getName());
+        facility.setDescription(updatedFacilityDTO.getDescription());
+        facility.setAddress(updatedFacilityDTO.getAddress());
+        facility.setCity(updatedFacilityDTO.getCity());
 
-        return facilityRepository.save(facility);
+
+        List<WorkDay> existingWorkDays = workDayRepository.findByFacilityId(facility.getId());
+        workDayRepository.deleteAll(existingWorkDays);
+
+        for (FacilityDTO.WorkDayDTO workDayDTO : updatedFacilityDTO.getWorkDays()) {
+            WorkDay workDay = new WorkDay();
+            workDay.setValidFrom(workDayDTO.getValidFrom());
+            workDay.setDay(workDayDTO.getDay());
+            workDay.setFromTime(workDayDTO.getFromTime());
+            workDay.setUntilTime(workDayDTO.getUntilTime());
+            workDay.setFacility(facility);
+            workDayRepository.save(workDay);
+        }
+
+
+        List<Discipline> existingDisciplines = disciplineRepository.findByFacilityId(facility.getId());
+        disciplineRepository.deleteAll(existingDisciplines);
+
+        for (FacilityDTO.DisciplineDTO disciplineDTO : updatedFacilityDTO.getDisciplines()) {
+            Discipline discipline = new Discipline();
+            discipline.setName(disciplineDTO.getName());
+            discipline.setFacility(facility);
+            disciplineRepository.save(discipline);
+        }
+
+        facilityRepository.save(facility);
+
+        return mapToDTO(facility);
+    }
+
+    private FacilityDTO mapToDTO(Facility facility) {
+        FacilityDTO dto = new FacilityDTO();
+        dto.setId(facility.getId());
+        dto.setName(facility.getName());
+        dto.setDescription(facility.getDescription());
+        dto.setAddress(facility.getAddress());
+        dto.setCity(facility.getCity());
+        if (facility.getCreatedAt() != null) {
+            dto.setCreatedAt(facility.getCreatedAt().atStartOfDay());
+        }
+
+
+        List<FacilityDTO.WorkDayDTO> workDayDTOs = facility.getWorkDays().stream()
+                .map(workDay -> new FacilityDTO.WorkDayDTO(workDay.getValidFrom(), workDay.getDay(), workDay.getFromTime(), workDay.getUntilTime()))
+                .collect(Collectors.toList());
+        dto.setWorkDays(workDayDTOs);
+
+        List<FacilityDTO.DisciplineDTO> disciplineDTOs = facility.getDisciplines().stream()
+                .map(discipline -> new FacilityDTO.DisciplineDTO(discipline.getName()))
+                .collect(Collectors.toList());
+        dto.setDisciplines(disciplineDTOs);
+
+        return dto;
+    }
+
+    public FacilityDTO convertToDTO(Facility facility) {
+        return new FacilityDTO(
+                facility.getId(),
+                facility.getName(),
+                facility.getAddress(),
+                facility.getCity(),
+                facility.getCreatedAt().atStartOfDay(),
+                facility.getDescription(),
+                facility.getWorkDays().stream().map(this::convertToWorkDayDTO).collect(Collectors.toList()),
+                facility.getDisciplines().stream().map(this::convertToDisciplineDTO).collect(Collectors.toList())
+        );
+    }
+
+    private FacilityDTO.WorkDayDTO convertToWorkDayDTO(WorkDay workDay) {
+        return new FacilityDTO.WorkDayDTO(
+                workDay.getValidFrom(),
+                workDay.getDay(),
+                workDay.getFromTime(),
+                workDay.getUntilTime()
+        );
+    }
+
+    private FacilityDTO.DisciplineDTO convertToDisciplineDTO(Discipline discipline) {
+        return new FacilityDTO.DisciplineDTO(
+                discipline.getName()
+        );
     }
 
     public void deleteFacility(Long id) {
         facilityRepository.deleteById(id);
     }
 
-
-
+    public Facility findById(Long id) {
+        return facilityRepository.findById(id).orElse(null);
+    }
 }

@@ -44,12 +44,13 @@ public class FacilityController {
         List<Facility> facilities = facilityService.searchFacilities(city, discipline, minRating, maxRating, hasWorkDays);
         return ResponseEntity.ok(facilities);
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Facility> getFacilityById(@PathVariable Long id) {
-        Optional<Facility> facilityOptional = facilityService.getFacilityById(id);
-        return facilityOptional.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Facility> getFacilityById(@PathVariable Long id) {
+//        Optional<Facility> facilityOptional = facilityService.getFacilityById(id);
+//        return facilityOptional.map(ResponseEntity::ok)
+//                .orElseGet(() -> ResponseEntity.notFound().build());
+//    }
 
     @GetMapping("/{id}/workdays")
     public ResponseEntity<List<WorkDay>> getWorkDaysByFacilityId(@PathVariable Long id) {
@@ -64,14 +65,26 @@ public class FacilityController {
         return new ResponseEntity<>(facility, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('MANAGER')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MANAGER')")
     @PutMapping("/{id}")
-    public ResponseEntity<Facility> updateFacility(@PathVariable Long id, @RequestBody Facility updatedFacility) {
-        Facility facility = facilityService.updateFacility(id, updatedFacility);
-        if (facility == null) {
+    public ResponseEntity<FacilityDTO> updateFacility(@PathVariable Long id, @RequestBody FacilityDTO updatedFacilityDTO) {
+        FacilityDTO facilityDTO = facilityService.updateFacility(id, updatedFacilityDTO);
+        if (facilityDTO != null) {
+            return ResponseEntity.ok(facilityDTO);
+        } else {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(facility);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<FacilityDTO> getFacilityById(@PathVariable Long id) {
+        Facility facility = facilityService.findById(id);
+        if (facility != null) {
+            FacilityDTO facilityDTO = facilityService.convertToDTO(facility);
+            return ResponseEntity.ok(facilityDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PreAuthorize("hasRole('ADMIN')")

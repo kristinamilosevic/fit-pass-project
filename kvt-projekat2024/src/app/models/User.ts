@@ -16,7 +16,7 @@ export class User {
     city: string;
     zipCode: string;
     reviews: Review[];
-    image?: Image; // Make this optional
+    image?: Image; 
     exercises: Exercise[];
     manages: Manages[];
     userType: string;
@@ -34,7 +34,7 @@ export class User {
         city: string,
         zipCode: string,
         reviews: Review[] = [],
-        image?: Image, // Make this optional
+        image?: Image, 
         exercises: Exercise[] = [],
         manages: Manages[] = [],
         userType: string = ''
@@ -51,7 +51,7 @@ export class User {
         this.city = city;
         this.zipCode = zipCode;
         this.reviews = reviews;
-        this.image = image; // This can be undefined
+        this.image = image; 
         this.exercises = exercises;
         this.manages = manages;
         this.userType = userType;

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.DayOfWeek;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Data
@@ -25,6 +26,13 @@ public class FacilityDTO {
 
     // Lista disciplina
     private List<DisciplineDTO> disciplines;
+
+    public String getCreatedAt() {
+        if (createdAt != null) {
+            return createdAt.format(DateTimeFormatter.ISO_DATE_TIME);
+        }
+        return null;
+    }
 
     // WorkDay DTO
     @Data
