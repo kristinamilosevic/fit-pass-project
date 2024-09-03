@@ -5,6 +5,7 @@ import { ExerciseService } from '../../services/exercise/exercise.service';
 import { UserService } from '../../services/user/user.service';
 import { Facility } from '../../models/Facility';
 import { WorkDay } from '../../models/WorkDay';
+import { Review } from '../../models/Review';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
@@ -23,6 +24,7 @@ export class FacilityComponent implements OnInit {
   facilityId: number = 0;
   userId: number | null = null;
   email: string | null = null;
+  reviews: Review[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -49,6 +51,7 @@ export class FacilityComponent implements OnInit {
     }
 
     this.loadFacility();
+    this.loadReviews();
   }
 
   loadFacility(): void {
@@ -59,7 +62,19 @@ export class FacilityComponent implements OnInit {
         alert('Error loading facility');
       }
     });
-  
+  }
+
+  loadReviews(): void { 
+    this.facilityService.getReviewsByFacilityId(this.facilityId).subscribe({
+      next: (data) => {
+        this.reviews = data;
+        console.log('Reviews loaded:', this.reviews);
+      },
+      error: (err) => {
+        console.error('Error loading reviews:', err);
+        alert(`Error loading reviews: ${err.message}`);
+      }
+    });
   }
 
   loadWorkDays(facilityId: number): void {
@@ -74,7 +89,7 @@ export class FacilityComponent implements OnInit {
       }
     });
   }
-  
+
   getUserIdByEmail(email: string): void {
     this.userService.getUserIdByEmail(email).subscribe({
       next: (id) => {
@@ -115,5 +130,31 @@ export class FacilityComponent implements OnInit {
 
   review(facilityId: number): void {
     this.router.navigate(['/review', facilityId]);  
+  }
+
+  hideReview(reviewId: number): void {
+    this.facilityService.hideReview(reviewId).subscribe({
+      next: () => {
+        alert('Review successfully hidden.');
+        this.loadReviews();
+      },
+      error: (err) => {
+        console.error('Error hiding review:', err);
+        alert('Error hiding review.');
+      }
+    });
+  }
+
+  deleteReview(reviewId: number): void {
+    this.facilityService.deleteReview(reviewId).subscribe({
+      next: response => {
+        alert('Review deleted successfully.');
+        this.loadReviews();
+      },
+      error: (err) => {
+        console.error('Error deleting review:', err);
+        alert('Error deleting review.');
+      }
+    });
   }
 }

@@ -15,9 +15,11 @@ import { DayOfWeek } from '../../models/DayOfWeek';
   styleUrls: ['./update-facility.component.css'],
   imports: [CommonModule, FormsModule]
 })
+
 export class UpdateFacilityComponent implements OnInit {
   facility: Facility | null = null;
   id!: number;
+  
 
   constructor(
     private route: ActivatedRoute,

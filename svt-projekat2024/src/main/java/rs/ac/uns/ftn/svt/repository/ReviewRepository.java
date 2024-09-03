@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     @EntityGraph(attributePaths = {"facility", "comment", "rate"})
     List<Review> findByUserId(Long userId);
+
+    List<Review> findByFacilityId(Long facilityId);
+
 }

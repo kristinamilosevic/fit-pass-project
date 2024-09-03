@@ -9,6 +9,8 @@ import rs.ac.uns.ftn.svt.repository.ReviewRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
@@ -29,7 +31,40 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    public List<Review> getReviewsByFacilityId(Long facilityId) {
+        return reviewRepository.findByFacilityId(facilityId)
+                .stream()
+                .filter(review -> Boolean.TRUE.equals(review.getIsActive()) && Boolean.TRUE.equals(review.getHidden()))
+                .collect(Collectors.toList());
+    }
     public List<Review> getReviewsByUserId(Long userId) {
         return reviewRepository.findByUserId(userId);
     }
+
+    public void updateReview(Review review) {
+        reviewRepository.save(review);
+    }
+
+    public Optional<Review> findById(Long reviewId) {
+        return reviewRepository.findById(reviewId);
+    }
+
+    public void setHiddenFalse(Long reviewId) {
+        Optional<Review> review = reviewRepository.findById(reviewId);
+        if (review.isPresent()) {
+            Review existingReview = review.get();
+            existingReview.setHidden(false);
+            reviewRepository.save(existingReview);
+        } else {
+            throw new IllegalArgumentException("Review not found");
+        }
+    }
+
+    public void setHiddenTrue(Long reviewId) {
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new RuntimeException("Review not found with id " + reviewId));
+        review.setHidden(true);
+        reviewRepository.save(review);
+    }
+
 }

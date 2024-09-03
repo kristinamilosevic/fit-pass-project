@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Facility } from '../../models/Facility';
 import { WorkDay } from '../../models/WorkDay';
+import { Review } from '../../models/Review';
 
 @Injectable({
   providedIn: 'root'
@@ -41,4 +42,17 @@ export class FacilityService {
   countExercisesByUserIdAndFacilityId(userId: number, facilityId: number): Observable<number> {
     return this.http.get<number>(`${this.baseUrl}/exercises/count/${userId}/${facilityId}`);
   }
+
+  getReviewsByFacilityId(facilityId: number): Observable<Review[]> {
+    return this.http.get<Review[]>(`${this.baseUrl}/reviews/facility/${facilityId}`);
+  }
+
+  hideReview(reviewId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/reviews/hide/${reviewId}`, null);
+  }
+  
+  deleteReview(reviewId: number): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/reviews/delete/${reviewId}`, null);
+  }
+  
 }

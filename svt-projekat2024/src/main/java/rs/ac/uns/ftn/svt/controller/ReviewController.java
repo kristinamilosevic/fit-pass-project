@@ -105,4 +105,65 @@ public class ReviewController {
         }
     }
 
+    @GetMapping("/facility/{facilityId}")
+    public ResponseEntity<List<ReviewDTO>> getReviewsByFacility(@PathVariable Long facilityId) {
+        try {
+            List<Review> reviews = reviewService.getReviewsByFacilityId(facilityId);
+
+            if (reviews.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+
+            List<ReviewDTO> reviewDTOs = reviews.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.ok(reviewDTOs);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
+        }
+    }
+
+
+
+    @PutMapping("/delete/{reviewId}")
+    public ResponseEntity<Map<String, String>> deleteReview(@PathVariable Long reviewId) {
+        try {
+            Review review = reviewService.findById(reviewId)
+                    .orElseThrow(() -> new IllegalArgumentException("Review not found"));
+            review.setIsActive(false);
+            reviewService.updateReview(review);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Review deleted successfully."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", "Error deleting review: " + e.getMessage()));
+        }
+    }
+
+
+    @PutMapping("/hide/{reviewId}")
+    public ResponseEntity<Map<String, String>> hideReview(@PathVariable Long reviewId) {
+        try {
+            reviewService.setHiddenFalse(reviewId);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Review successfully hidden."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("error", "Error hiding review: " + e.getMessage()));
+        }
+    }
+
+
+    @PutMapping("/show/{reviewId}")
+    public ResponseEntity<String> showReview(@PathVariable Long reviewId) {
+        try {
+            reviewService.setHiddenTrue(reviewId);
+            return ResponseEntity.ok("Review successfully shown.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error showing review: " + e.getMessage());
+        }
+    }
+
+
 }
