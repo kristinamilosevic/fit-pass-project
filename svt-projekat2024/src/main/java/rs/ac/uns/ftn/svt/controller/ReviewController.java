@@ -9,6 +9,7 @@ import rs.ac.uns.ftn.svt.model.Comment;
 import rs.ac.uns.ftn.svt.model.Rate;
 import rs.ac.uns.ftn.svt.model.Review;
 import rs.ac.uns.ftn.svt.repository.*;
+import rs.ac.uns.ftn.svt.service.FacilityService;
 import rs.ac.uns.ftn.svt.service.ReviewService;
 
 import java.time.LocalDateTime;
@@ -22,14 +23,16 @@ import java.util.stream.Collectors;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final FacilityService facilityService;
     private final UserRepository userRepository;
     private final FacilityRepository facilityRepository;
     private final RateRepository rateRepository;
     private final CommentRepository commentRepository;
 
     @Autowired
-    public ReviewController(ReviewService reviewService, UserRepository userRepository, FacilityRepository facilityRepository, RateRepository rateRepository, CommentRepository commentRepository) {
+    public ReviewController(ReviewService reviewService, FacilityService facilityService, UserRepository userRepository, FacilityRepository facilityRepository, RateRepository rateRepository, CommentRepository commentRepository) {
         this.reviewService = reviewService;
+        this.facilityService = facilityService;
         this.userRepository = userRepository;
         this.facilityRepository = facilityRepository;
         this.rateRepository = rateRepository;
@@ -92,12 +95,15 @@ public class ReviewController {
             review.setCreatedAt(LocalDateTime.now());
             review.setExerciseCount((Integer) reviewData.get("exerciseCount"));
             review.setHidden((Boolean) reviewData.get("hidden"));
+            review.setIsActive((Boolean) reviewData.get("isActive"));
             review.setUser(userRepository.findById(Long.valueOf((Integer) reviewData.get("userId"))).orElseThrow());
             review.setFacility(facilityRepository.findById(Long.valueOf((Integer) reviewData.get("facilityId"))).orElseThrow());
             review.setComment(savedComment);
             review.setRate(savedRate);
 
             Review createdReview = reviewService.createReview(review);
+
+            facilityService.updateTotalRating(createdReview.getFacility().getId());
 
             return new ResponseEntity<>(createdReview, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -130,16 +136,14 @@ public class ReviewController {
     @PutMapping("/delete/{reviewId}")
     public ResponseEntity<Map<String, String>> deleteReview(@PathVariable Long reviewId) {
         try {
-            Review review = reviewService.findById(reviewId)
-                    .orElseThrow(() -> new IllegalArgumentException("Review not found"));
-            review.setIsActive(false);
-            reviewService.updateReview(review);
+            reviewService.deleteReview(reviewId);
             return ResponseEntity.ok(Collections.singletonMap("message", "Review deleted successfully."));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Collections.singletonMap("error", "Error deleting review: " + e.getMessage()));
         }
     }
+
 
 
     @PutMapping("/hide/{reviewId}")

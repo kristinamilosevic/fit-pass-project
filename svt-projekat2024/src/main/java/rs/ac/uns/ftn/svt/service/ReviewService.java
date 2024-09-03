@@ -17,6 +17,8 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final RateRepository rateRepository;
+    @Autowired
+    private FacilityService facilityService;
 
     @Autowired
     public ReviewService(ReviewRepository reviewRepository, RateRepository rateRepository) {
@@ -67,4 +69,16 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
+    public void deleteReview(Long reviewId) {
+        Optional<Review> reviewOpt = reviewRepository.findById(reviewId);
+        if (reviewOpt.isPresent()) {
+            Review review = reviewOpt.get();
+            review.setIsActive(false);
+            updateReview(review);
+
+            Long facilityId = review.getFacility().getId();
+            facilityService.updateTotalRating(facilityId);
+
+        }
+    }
 }

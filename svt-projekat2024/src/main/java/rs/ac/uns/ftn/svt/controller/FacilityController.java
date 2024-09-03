@@ -93,4 +93,5 @@ public class FacilityController {
         facilityService.deleteFacility(id);
         return ResponseEntity.noContent().build();
     }
+
 }

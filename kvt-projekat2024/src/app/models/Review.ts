@@ -8,6 +8,7 @@ export class Review {
     createdAt: Date;
     exerciseCount: number;
     hidden: boolean;
+    isActive: boolean; 
     user: User;
     facilityName: string; // Promenjen naziv
     rate?: {
@@ -23,6 +24,7 @@ export class Review {
       createdAt: Date = new Date(),
       exerciseCount: number = 0,
       hidden: boolean = false,
+      isActive: boolean = true,
       user: User,
       facilityName: string, // Promenjen naziv
       rate: Rate,
@@ -32,6 +34,7 @@ export class Review {
       this.createdAt = createdAt;
       this.exerciseCount = exerciseCount;
       this.hidden = hidden;
+      this.isActive = isActive;
       this.user = user;
       this.facilityName = facilityName;
       this.rate = rate;

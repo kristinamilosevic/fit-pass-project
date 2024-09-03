@@ -16,8 +16,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class ReviewComponent implements OnInit {
   commentText: string = '';
-  exerciseCount: number = 0; // Broj vežbi za trenutnog korisnika
-  hidden: boolean = false; // Hidden is always false
+  exerciseCount: number = 0; 
+  hidden: boolean = true; 
+  isActive: boolean = true;
   rate = {
     equipment: 0,
     staff: 0,
@@ -28,12 +29,12 @@ export class ReviewComponent implements OnInit {
   facilityId: number = 0;
   createdAt: string = '';
   commentInputVisible: boolean = false; 
-  ratingError: boolean = false; // New property to handle rating errors
+  ratingError: boolean = false; 
 
   constructor(
     private reviewService: ReviewService,
     private userService: UserService,
-    private exerciseService: ExerciseService, // Dodajte ovaj servis
+    private exerciseService: ExerciseService, 
     private route: ActivatedRoute
   ) {}
 
@@ -93,8 +94,8 @@ export class ReviewComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('User ID:', this.userId); // Dodaj ovo za debagovanje
-    console.log('Facility ID:', this.facilityId); // Dodaj ovo za debagovanje
+    console.log('User ID:', this.userId); 
+    console.log('Facility ID:', this.facilityId); 
     if (!this.userId || !this.facilityId) {
       console.error('User ID or Facility ID is not available');
       return;
@@ -108,7 +109,8 @@ export class ReviewComponent implements OnInit {
     const reviewData = {
       commentText: this.commentText,
       exerciseCount: this.exerciseCount,
-      hidden: this.hidden,
+      hidden: this.hidden, 
+      isActive: this.isActive,
       rate: this.rate,
       userId: this.userId,
       facilityId: this.facilityId,
@@ -125,5 +127,6 @@ export class ReviewComponent implements OnInit {
         alert('Error creating review');
       }
     );
-  }
+}
+
 }

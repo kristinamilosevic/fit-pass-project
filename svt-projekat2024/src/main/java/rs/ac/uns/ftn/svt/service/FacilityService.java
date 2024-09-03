@@ -3,13 +3,14 @@ package rs.ac.uns.ftn.svt.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.svt.dto.FacilityDTO;
-import rs.ac.uns.ftn.svt.model.Discipline;
-import rs.ac.uns.ftn.svt.model.Facility;
-import rs.ac.uns.ftn.svt.model.WorkDay;
+import rs.ac.uns.ftn.svt.model.*;
 import rs.ac.uns.ftn.svt.repository.DisciplineRepository;
 import rs.ac.uns.ftn.svt.repository.FacilityRepository;
+import rs.ac.uns.ftn.svt.repository.ReviewRepository;
 import rs.ac.uns.ftn.svt.repository.WorkDayRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,9 +23,10 @@ public class FacilityService {
     private final FacilityRepository facilityRepository;
     @Autowired
     private WorkDayRepository workDayRepository;
-
     @Autowired
     private DisciplineRepository disciplineRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
 
     @Autowired
     public FacilityService(FacilityRepository facilityRepository) {
@@ -180,5 +182,28 @@ public class FacilityService {
 
     public Facility findById(Long id) {
         return facilityRepository.findById(id).orElse(null);
+    }
+
+    public void updateTotalRating(Long facilityId) {
+        List<Review> reviews = reviewRepository.findByFacilityIdAndIsActive(facilityId, true);
+
+        if (reviews.isEmpty()) {
+            return;
+        }
+
+        double totalRating = reviews.stream()
+                .mapToDouble(review -> {
+                    Rate rate = review.getRate();
+                    return rate != null ? (rate.getEquipment() + rate.getStaff() + rate.getHygiene() + rate.getSpace()) / 4.0 : 0;
+                })
+                .average()
+                .orElse(0);
+
+        BigDecimal roundedRating = new BigDecimal(totalRating)
+                .setScale(2, RoundingMode.HALF_UP);
+
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow();
+        facility.setTotalRating(roundedRating.doubleValue());
+        facilityRepository.save(facility);
     }
 }

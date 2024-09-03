@@ -14,4 +14,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findByFacilityId(Long facilityId);
 
+    List<Review> findByFacilityIdAndIsActive(Long facilityId, boolean b);
 }
