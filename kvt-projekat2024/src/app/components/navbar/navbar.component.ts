@@ -11,12 +11,19 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule]
 })
 export class NavBarComponent implements OnInit {
-  userRole: string | null = null; // To store the user role
+  userRole: string | null = null; 
+  isLoggedIn: boolean = false;
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    this.checkIfLoggedIn();
     this.loadUserRole();
+  }
+
+  checkIfLoggedIn() {
+    const token = localStorage.getItem('userEmail');
+    this.isLoggedIn = !!token; 
   }
 
   loadUserRole() {
@@ -52,4 +59,16 @@ export class NavBarComponent implements OnInit {
     this.router.navigate(['/add-facility']);
   }
 
+  loadAccountRequests(){
+    this.router.navigate(['/admin'])
+  }
+
+  AllAccountRequests(){
+    this.router.navigate(['/account-request-list'])
+  }
+
+  LoadProfile(){
+    this.router.navigate(['/update-user'])
+  }
+  
 }

@@ -5,5 +5,14 @@
     <li *ngIf="isAdmin()">
       <button (click)="createFacility()" class="btn btn-secondary">Create Facility</button>
     </li>
+    <li *ngIf="isAdmin()">
+      <button (click)="loadAccountRequests()" class="btn btn-3">Account requests</button>
+    </li>
+    <li *ngIf="isAdmin()">
+      <button (click)="AllAccountRequests()" class="btn btn-4">All account requests</button>
+    </li>
+    <li *ngIf="isLoggedIn">
+      <button (click)="LoadProfile()" class="btn btn-5">Profile</button>
+    </li>
   </ul>
 </nav>
