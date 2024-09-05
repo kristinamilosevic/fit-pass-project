@@ -39,20 +39,26 @@
     <button (click)="scheduleVisit(facility.id)" class="btn btn-primary">Schedule Visit</button>
     <button *ngIf="canReview" (click)="review(facility.id)" class="btn btn-primary">Review</button>
     
-    <h3 class="reviews-heading">Reviews</h3>
-    <div *ngIf="reviews && reviews.length > 0; else noReviews">
-        <div *ngFor="let review of reviews" class="review-item">
-            <p><strong>Date:</strong> {{ review.createdAt | date }}</p>
-            <p><strong>Comment:</strong> {{ review.commentText }}</p>
-            <p><strong>Rating:</strong> Equipment - {{ review.rate?.equipment }}, Staff - {{ review.rate?.staff }}, Hygiene - {{ review.rate?.hygiene }}, Space - {{ review.rate?.space }}</p>
-            <button (click)="hideReview(review.id)" class="btn btn-warning">Hide</button>
-            <button (click)="deleteReview(review.id)" class="btn btn-danger">Delete</button>
-        </div>
-    </div>
-    <ng-template #noReviews>
-        <p>No reviews available for this facility.</p>
-    </ng-template>
-</div>
+    <div *ngIf="userType === 'MANAGER'">
+      <h3 class="reviews-heading">Reviews</h3>
+      <div *ngIf="reviews && reviews.length > 0; else noReviews">
+          <div *ngFor="let review of reviews" class="review-item">
+              <p><strong>Date:</strong> {{ review.createdAt | date }}</p>
+              <p><strong>Comment:</strong> {{ review.commentText }}</p>
+              <p><strong>Rating:</strong> Equipment - {{ review.rate?.equipment || 'No rating' }}, 
+                  Staff - {{ review.rate?.staff || 'No rating' }}, 
+                  Hygiene - {{ review.rate?.hygiene || 'No rating' }}, 
+                  Space - {{ review.rate?.space || 'No rating' }}
+              </p>
+              <button (click)="hideReview(review.id)" class="btn btn-warning">Hide</button>
+              <button (click)="deleteReview(review.id)" class="btn btn-danger">Delete</button>
+          </div>
+      </div>
+      <ng-template #noReviews>
+          <p>No reviews available for this facility.</p>
+      </ng-template>
+  </div>
+  
 
 <div *ngIf="!facility">
     <p>Loading...</p>

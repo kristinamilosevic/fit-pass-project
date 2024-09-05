@@ -14,6 +14,7 @@ import rs.ac.uns.ftn.svt.service.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,6 +43,13 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/all-users")
+    public ResponseEntity<List<User>> getUsersWithUserType() {
+        List<User> users = userService.findByUserType("User");
+        return ResponseEntity.ok(users);
+    }
+
     @GetMapping("/idByEmail")
     public ResponseEntity<Long> getUserIdByEmail(@RequestParam String email) {
         Long userId = userService.findUserIdByEmail(email);

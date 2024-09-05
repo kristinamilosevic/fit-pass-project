@@ -25,6 +25,7 @@ export class FacilityComponent implements OnInit {
   userId: number | null = null;
   email: string | null = null;
   reviews: Review[] = [];
+  userType: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +36,7 @@ export class FacilityComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.userType = localStorage.getItem('userRole');
     this.facilityId = +this.route.snapshot.paramMap.get('id')!;
     console.log('Facility ID:', this.facilityId);
 

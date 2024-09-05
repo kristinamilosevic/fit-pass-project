@@ -86,4 +86,8 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByEmail(email);
         return userOptional.map(User::getUserType).orElse(null);
     }
+
+    public List<User> findByUserType(String userType) {
+        return userRepository.findByUserType(userType);
+    }
 }

@@ -7,6 +7,8 @@ import { UserService } from '../../services/user/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import jwt_decode from 'jwt-decode'; 
+import { Router } from '@angular/router';
+
 @Component({
   standalone: true,
   imports: [CommonModule, FormsModule],
@@ -24,7 +26,8 @@ export class ExerciseComponent implements OnInit {
     private route: ActivatedRoute,
     private facilityService: FacilityService,
     private exerciseService: ExerciseService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +95,7 @@ export class ExerciseComponent implements OnInit {
       response => {
         console.log('Response from backend:', response);
         alert('Reservation successfully submitted!');
+        this.router.navigate(['/facilities']);
       },
       error => {
         console.error('Error occurred while sending data:', error);

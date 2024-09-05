@@ -47,6 +47,8 @@ export class ChangePasswordComponent {
         (response: string) => {
           this.successMessage = response; 
           this.errorMessage = '';
+          alert('Password has been successfully changed!');
+          this.router.navigate(['/update-user']);
         },
         (error) => {
           this.errorMessage = error.error;

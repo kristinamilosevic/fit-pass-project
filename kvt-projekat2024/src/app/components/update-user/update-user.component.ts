@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user/user.service';
-import { ReviewService } from '../../services/review/review.service'; // Pretpostavljam da imate servis za utiske
+import { ReviewService } from '../../services/review/review.service';
 import { User } from '../../models/User';
-import { Review } from '../../models/Review'; // Definišite model Review prema vašoj strukturi
+import { Review } from '../../models/Review';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -21,7 +21,11 @@ export class UpdateUserComponent implements OnInit {
   reviews: Review[] = []; 
   visitedFacilities: any[] = [];
 
-  constructor(private userService: UserService, private reviewService: ReviewService, private router: Router) {}
+  constructor(
+    private userService: UserService, 
+    private reviewService: ReviewService, 
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.email = localStorage.getItem('userEmail') || ''; 
@@ -50,16 +54,6 @@ export class UpdateUserComponent implements OnInit {
     this.reviewService.getReviewsByUserId(this.user.id).subscribe({
       next: (reviews: Review[]) => {
         this.reviews = reviews;
-        this.reviews.forEach(review => {
-          this.reviewService.getReviewById(review.id).subscribe({
-            next: (fullReview: Review) => {
-              Object.assign(review, fullReview);
-            },
-            error: (error) => {
-              console.error('Error fetching review details:', error);
-            }
-          });
-        });
       },
       error: (error) => {
         this.message = 'Error fetching user reviews: ' + error.message;
@@ -83,6 +77,7 @@ export class UpdateUserComponent implements OnInit {
       next: () => {
         this.message = 'User successfully updated!';
         alert('User successfully updated!');
+        this.router.navigate(['/update-user']); // Redirekcija nakon uspešne izrade
       },
       error: (error) => {
         this.message = 'Error updating user: ' + error.message;

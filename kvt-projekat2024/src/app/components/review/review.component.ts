@@ -6,6 +6,7 @@ import { ExerciseService } from '../../services/exercise/exercise.service'; // I
 import jwt_decode from 'jwt-decode';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -35,7 +36,8 @@ export class ReviewComponent implements OnInit {
     private reviewService: ReviewService,
     private userService: UserService,
     private exerciseService: ExerciseService, 
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -121,6 +123,7 @@ export class ReviewComponent implements OnInit {
       response => {
         console.log('Review created successfully', response);
         alert('Review successfully submitted!');
+        this.router.navigate(['/facilities']);
       },
       error => {
         console.error('Error creating review', error);

@@ -18,13 +18,9 @@
       <input type="text" id="city" name="city" [(ngModel)]="facility.city">
     </div>
 
-    <!-- Unos radnih dana -->
+
     <div *ngFor="let workDay of facility.workDays; let i = index">
       <h4>Work Day {{ i + 1 }}</h4>
-      <div class="form-group">
-        <label for="validFrom-{{i}}">Valid From</label>
-        <input type="date" id="validFrom-{{i}}" name="validFrom-{{i}}" [(ngModel)]="workDay.validFrom" required>
-      </div>
       <div class="form-group">
         <label for="day-{{i}}">Day of the Week</label>
         <select id="day-{{i}}" name="day-{{i}}" [(ngModel)]="workDay.day" required>
@@ -43,7 +39,7 @@
     </div>
     <button type="button" class="btn btn-primary" (click)="addWorkDay()">Add Work Day</button>
 
-    <!-- Unos disciplina -->
+
     <div *ngFor="let discipline of facility.disciplines; let i = index">
       <h4>Discipline {{ i + 1 }}</h4>
       <div class="form-group">

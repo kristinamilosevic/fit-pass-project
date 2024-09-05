@@ -6,6 +6,7 @@ import { Discipline } from '../../models/Discipline';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DayOfWeek } from '../../models/DayOfWeek';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-facility',
@@ -34,7 +35,7 @@ export class AddFacilityComponent {
 
   daysOfWeek = Object.values(DayOfWeek);
 
-  constructor(private facilityService: FacilityService) { }
+  constructor(private facilityService: FacilityService, private router: Router) { }
 
   onSubmit() {
     const facilityToSend = {
@@ -53,6 +54,7 @@ export class AddFacilityComponent {
   
     this.facilityService.createFacility(facilityToSend).subscribe(response => {
       console.log('Facility added', response);
+      this.router.navigate(['/facilities']);
     });
   }
   
