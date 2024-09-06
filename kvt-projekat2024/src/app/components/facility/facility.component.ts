@@ -44,7 +44,7 @@ export class FacilityComponent implements OnInit {
 
     if (token) {
       const decodedToken: any = jwt_decode(token);
-      this.email = decodedToken.sub; // Pretpostavljam da je email u 'sub' polju
+      this.email = decodedToken.sub; 
       console.log('Decoded email:', this.email);
       if (this.email) {
         console.log('Calling getUserIdByEmail with email:', this.email); 

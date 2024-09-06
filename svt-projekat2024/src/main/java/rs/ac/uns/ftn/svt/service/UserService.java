@@ -3,6 +3,7 @@ package rs.ac.uns.ftn.svt.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.ftn.svt.dto.UserUpdateDTO;
+import rs.ac.uns.ftn.svt.model.Manages;
 import rs.ac.uns.ftn.svt.model.User;
 import rs.ac.uns.ftn.svt.repository.UserRepository;
 
@@ -57,6 +58,9 @@ public class UserService {
         if (userUpdateDTO.getAddress() != null) {
             user.setAddress(userUpdateDTO.getAddress());
         }
+        if (userUpdateDTO.getUserType() != null) {
+            user.setUserType(userUpdateDTO.getUserType());
+        }
         if (userUpdateDTO.getCity() != null) {
             user.setCity(userUpdateDTO.getCity());
         }
@@ -89,5 +93,24 @@ public class UserService {
 
     public List<User> findByUserType(String userType) {
         return userRepository.findByUserType(userType);
+    }
+
+    public UserUpdateDTO toUserUpdateDTO(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserUpdateDTO dto = new UserUpdateDTO();
+        dto.setEmail(user.getEmail());
+        dto.setName(user.getName());
+        dto.setSurname(user.getSurname());
+        dto.setBirthday(user.getBirthday());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setAddress(user.getAddress());
+        dto.setCity(user.getCity());
+        dto.setUserType(user.getUserType());
+        dto.setZipCode(user.getZipCode());
+
+        return dto;
     }
 }

@@ -30,6 +30,7 @@ li a {
     color: #405D72;
     text-decoration: none;
     font-weight: bold;
+    flex: 25;
 }
 
 li a:hover {
@@ -45,6 +46,8 @@ button {
     cursor: pointer;
     font-size: 14px;
     margin-left: 10px;
+    flex: 2;
+    margin-left: 100px;
 }
 
 button[disabled] {

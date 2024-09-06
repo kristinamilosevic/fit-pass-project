@@ -23,25 +23,21 @@ export class AdminComponent implements OnInit {
     this.getPendingAccountRequests();
   }
 
-  // Dohvati sve zahteve
   getPendingAccountRequests() {
     this.http.get<any[]>('http://localhost:8080/api/account-requests')
       .subscribe(data => {
         this.accountRequests = data;
-        // Filtriraj samo PENDING zahteve
         this.pendingRequests = this.accountRequests.filter(request => request.status === 'PENDING');
       });
   }
 
-  // Odobri zahtev
   approveRequest(id: number) {
     this.adminService.approveAccountRequest(id).subscribe(() => {
       console.log('Zahtev odobren');
-      this.getPendingAccountRequests();  // Osvježi listu nakon akcije
+      this.getPendingAccountRequests();  
     });
   }
 
-  // Odbij zahtev
   rejectRequest(id: number) {
     if (this.rejectionReason.trim() === '') {
       alert('Unesite razlog odbijanja.');
@@ -50,7 +46,7 @@ export class AdminComponent implements OnInit {
 
     this.adminService.rejectAccountRequest(id, this.rejectionReason).subscribe(() => {
       console.log('Zahtev odbijen');
-      this.getPendingAccountRequests();  // Osvježi listu nakon akcije
+      this.getPendingAccountRequests();  
     });
   }
 }

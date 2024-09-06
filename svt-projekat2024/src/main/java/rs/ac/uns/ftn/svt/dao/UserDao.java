@@ -25,7 +25,7 @@ public class UserDao {
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
                 user.getPassword(),
-                Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
+                Collections.singleton(new SimpleGrantedAuthority(user.getUserType()))
         );
     }
 }

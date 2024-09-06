@@ -83,11 +83,11 @@ export class ReviewComponent implements OnInit {
   }
 
   toggleCommentInput(): void {
-    this.commentInputVisible = !this.commentInputVisible; // Toggle comment input visibility
+    this.commentInputVisible = !this.commentInputVisible; 
   }
 
   checkRating(): void {
-    // Proverava da li je neka ocena veća od 10
+    
     this.ratingError = 
       this.rate.equipment > 10 ||
       this.rate.staff > 10 ||
@@ -96,8 +96,6 @@ export class ReviewComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log('User ID:', this.userId); 
-    console.log('Facility ID:', this.facilityId); 
     if (!this.userId || !this.facilityId) {
       console.error('User ID or Facility ID is not available');
       return;

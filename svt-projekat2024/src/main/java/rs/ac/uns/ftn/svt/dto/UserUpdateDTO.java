@@ -19,5 +19,6 @@ public class UserUpdateDTO {
     private String phoneNumber;
     private String address;
     private String city;
+    private String userType;
     private String zipCode;
 }

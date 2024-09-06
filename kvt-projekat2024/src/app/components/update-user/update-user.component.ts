@@ -77,7 +77,7 @@ export class UpdateUserComponent implements OnInit {
       next: () => {
         this.message = 'User successfully updated!';
         alert('User successfully updated!');
-        this.router.navigate(['/update-user']); // Redirekcija nakon uspešne izrade
+        this.router.navigate(['/update-user']); 
       },
       error: (error) => {
         this.message = 'Error updating user: ' + error.message;

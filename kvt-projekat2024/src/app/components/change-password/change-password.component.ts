@@ -31,9 +31,7 @@ export class ChangePasswordComponent {
 
     try {
       const decodedToken: any = jwt_decode(token);
-      console.log(decodedToken)
       const email = decodedToken.sub; 
-      console.log(email)
 
       const url = `http://localhost:8080/api/users/change-password?email=${email}`;
 

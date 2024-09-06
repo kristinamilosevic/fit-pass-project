@@ -40,20 +40,19 @@ export class AddFacilityComponent {
   onSubmit() {
     const facilityToSend = {
       ...this.facility,
-      createdAt: this.facility.createdAt, // Ostavite kao Date objekat
+      createdAt: this.facility.createdAt, 
       workDays: this.facility.workDays.map(workDay => ({
         ...workDay,
-        validFrom: workDay.validFrom, // Ostavite kao Date objekat
-        facility: undefined // Uklonite referencu na ceo objekat
+        validFrom: workDay.validFrom, 
+        facility: undefined 
       })),
       disciplines: this.facility.disciplines.map(discipline => ({
         ...discipline,
-        facility: undefined // Uklonite referencu na ceo objekat
+        facility: undefined 
       }))
     };
   
     this.facilityService.createFacility(facilityToSend).subscribe(response => {
-      console.log('Facility added', response);
       this.router.navigate(['/facilities']);
     });
   }
@@ -67,7 +66,7 @@ export class AddFacilityComponent {
       day: this.daysOfWeek[0],
       fromTime: '',
       untilTime: '',
-      facility: this.facility // Koristimo objekat facility
+      facility: this.facility 
     };
     this.facility.workDays.push(workDay);
   }
@@ -80,7 +79,7 @@ export class AddFacilityComponent {
     const discipline: Discipline = {
       id: 0,
       name: '',
-      facility: this.facility // Koristimo objekat facility
+      facility: this.facility 
     };
     this.facility.disciplines.push(discipline);
   }

@@ -36,26 +36,17 @@ export class UpdateFacilityComponent implements OnInit {
   loadFacility(): void {
     this.facilityService.getFacilityById(this.id).subscribe({
       next: (data) => {
-        console.log('Odgovor sa servera:', data); // Logovanje odgovora sa servera
         this.facility = this.convertToFacility(data);
-        console.log('Disciplines data:', data.disciplines);
-      console.log('WorkDays data:', data.workDays);
-        console.log('Facility nakon konverzije:', this.facility); // Logovanje objekta nakon konverzije
       },
       error: (err) => console.error('Greška prilikom učitavanja objekta:', err)
     });
   }
   
   convertToFacility(data: any): Facility {
-    console.log('Raw data for conversion:', data);
   
-    // Proveri da li `disciplines` i `workDays` postoje u odgovoru
     const disciplines = data.disciplines || [];
     const workDays = data.workDays || [];
   
-    // Loguj podatke za debugging
-    console.log('Disciplines data:', disciplines);
-    console.log('WorkDays data:', workDays);
   
     return new Facility(
       data.id,
@@ -70,8 +61,8 @@ export class UpdateFacilityComponent implements OnInit {
       data.exercises || [],
       data.manages || [],
       data.images || [],
-      disciplines.map((d: any) => new Discipline(d.id, d.name, data.id)), // Pretpostavi da je `data.id` ID facility-a
-      workDays.map((wd: any) => new WorkDay(wd.id, new Date(wd.validFrom), wd.day as DayOfWeek, wd.fromTime, wd.untilTime, data.id)) // Pretpostavi da je `data.id` ID facility-a
+      disciplines.map((d: any) => new Discipline(d.id, d.name, data.id)), 
+      workDays.map((wd: any) => new WorkDay(wd.id, new Date(wd.validFrom), wd.day as DayOfWeek, wd.fromTime, wd.untilTime, data.id)) 
     );
   }
   
@@ -81,8 +72,7 @@ export class UpdateFacilityComponent implements OnInit {
     if (this.facility) {
       this.facilityService.updateFacility(this.id, this.facility).subscribe({
         next: () => {
-          console.log('Facility updated');
-          this.router.navigate(['/facilities']); // Preusmeravanje nakon ažuriranja
+          this.router.navigate(['/facilities']); 
         },
         error: () => console.error('Error updating facility')
       });

@@ -30,7 +30,7 @@ export class AccountRequestListComponent implements OnInit {
     this.http.delete(`http://localhost:8080/api/account-requests/${id}`)
       .subscribe(() => {
         console.log('Account request deleted');
-        this.getAllAccountRequests();  // Refresh list after deletion
+        this.getAllAccountRequests();  
       });
   }
 }

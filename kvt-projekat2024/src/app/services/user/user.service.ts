@@ -30,8 +30,6 @@ export class UserService {
   }
 
   getVisitedFacilitiesWithCounts(userEmail: string): Observable<any> {
-    console.log('Sending request to:', `${this.countExerciseUrl}/visited-facilities/${userEmail}`);
-    
     return this.http.get(`${this.countExerciseUrl}/visited-facilities/${userEmail}`)
       .pipe(
         tap(response => {
