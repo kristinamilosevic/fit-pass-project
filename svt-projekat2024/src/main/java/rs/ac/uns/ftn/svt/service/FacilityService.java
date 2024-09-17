@@ -2,12 +2,10 @@ package rs.ac.uns.ftn.svt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.svt.dto.FacilityDTO;
 import rs.ac.uns.ftn.svt.model.*;
-import rs.ac.uns.ftn.svt.repository.DisciplineRepository;
-import rs.ac.uns.ftn.svt.repository.FacilityRepository;
-import rs.ac.uns.ftn.svt.repository.ReviewRepository;
-import rs.ac.uns.ftn.svt.repository.WorkDayRepository;
+import rs.ac.uns.ftn.svt.repository.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,6 +25,8 @@ public class FacilityService {
     private DisciplineRepository disciplineRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ManagesRepository managesRepository;
 
     @Autowired
     public FacilityService(FacilityRepository facilityRepository) {
@@ -205,5 +205,26 @@ public class FacilityService {
         Facility facility = facilityRepository.findById(facilityId).orElseThrow();
         facility.setTotalRating(roundedRating.doubleValue());
         facilityRepository.save(facility);
+    }
+
+    public List<Facility> getInactiveFacilities() {
+        return facilityRepository.findByActiveFalse();
+    }
+
+    public Facility save(Facility facility) {
+        return facilityRepository.save(facility);
+    }
+
+    public List<Facility> getActiveFacilities() {
+        return facilityRepository.findByActiveTrue();
+    }
+
+    @Transactional
+    public void deactivateFacilityAndDeleteManages(Long facilityId) {
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new RuntimeException("Facility not found"));
+        facility.setActive(false);
+        facilityRepository.save(facility);
+
+        managesRepository.deleteByFacilityId(facilityId);
     }
 }

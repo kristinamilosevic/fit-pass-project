@@ -6,13 +6,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.svt.dto.FacilityDTO;
+import rs.ac.uns.ftn.svt.dto.UserDTO;
 import rs.ac.uns.ftn.svt.model.Facility;
+import rs.ac.uns.ftn.svt.model.User;
 import rs.ac.uns.ftn.svt.model.WorkDay;
 import rs.ac.uns.ftn.svt.service.FacilityService;
+import rs.ac.uns.ftn.svt.service.UserService;
 import rs.ac.uns.ftn.svt.service.WorkDayService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/facilities")
@@ -20,17 +24,19 @@ public class FacilityController {
 
     private final FacilityService facilityService;
     private final WorkDayService workDayService;
+    private final UserService userService;
 
     @Autowired
-    public FacilityController(FacilityService facilityService, WorkDayService workDayService, WorkDayService workDayService1) {
+    public FacilityController(FacilityService facilityService, WorkDayService workDayService, WorkDayService workDayService1, UserService userService) {
         this.facilityService = facilityService;
         this.workDayService = workDayService1;
+        this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Facility>> getAllFacilities() {
-        List<Facility> facilities = facilityService.getAllFacilities();
-        return ResponseEntity.ok(facilities);
+    public ResponseEntity<List<Facility>> getActiveFacilities() {
+        List<Facility> activeFacilities = facilityService.getActiveFacilities();
+        return ResponseEntity.ok(activeFacilities);
     }
 
     @GetMapping("/search")
@@ -92,6 +98,36 @@ public class FacilityController {
     public ResponseEntity<Void> deleteFacility(@PathVariable Long id) {
         facilityService.deleteFacility(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Facility>> getInactiveFacilities() {
+        List<Facility> inactiveFacilities = facilityService.getInactiveFacilities();
+        return ResponseEntity.ok(inactiveFacilities);
+    }
+    @GetMapping("/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+
+        users.forEach(user -> System.out.println("User: " + user.getName() + " " + user.getSurname()));
+
+        List<UserDTO> userDTOs = users.stream()
+                .map(user -> new UserDTO(user.getId(), user.getName(), user.getSurname()))
+                .collect(Collectors.toList());
+
+        userDTOs.forEach(userDTO -> System.out.println("UserDTO: " + userDTO.getName() + " " + userDTO.getSurname()));
+
+        return ResponseEntity.ok(userDTOs);
+    }
+
+    @DeleteMapping("/deactivate/{facilityId}")
+    public ResponseEntity<Void> deactivateFacility(@PathVariable Long facilityId) {
+        try {
+            facilityService.deactivateFacilityAndDeleteManages(facilityId);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 Internal Server Error
+        }
     }
 
 }

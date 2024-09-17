@@ -8,4 +8,5 @@ public class ManageDTO {
     private Long facilityId;
     private String startDate;
     private String endDate;
+    private boolean activateFacility;
 }

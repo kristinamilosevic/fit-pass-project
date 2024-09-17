@@ -14,4 +14,5 @@ public class ManagesService {
     public void save(Manages manages) {
         managesRepository.save(manages);
     }
+
 }

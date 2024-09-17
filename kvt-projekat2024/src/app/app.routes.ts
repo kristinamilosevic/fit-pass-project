@@ -11,6 +11,7 @@ import { FacilityComponent } from './components/facility/facility.component';
 import { ExerciseComponent } from './components/exercise/exercise.component';
 import { ReviewComponent } from './components/review/review.component';  
 import { UpdateUserComponent } from './components/update-user/update-user.component';
+import { InactiveFacilitiesComponent } from './components/inactive-facilities/inactive-facilities.component';  
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -24,7 +25,8 @@ export const routes: Routes = [
   { path: 'facility-details/:id', component: FacilityComponent },
   { path: 'exercise/:id', component: ExerciseComponent },
   { path: 'review/:id', component: ReviewComponent },
-  { path: 'update-user', component: UpdateUserComponent }
+  { path: 'update-user', component: UpdateUserComponent },
+  { path: 'inactive-facilities', component: InactiveFacilitiesComponent },
 ];
 
 

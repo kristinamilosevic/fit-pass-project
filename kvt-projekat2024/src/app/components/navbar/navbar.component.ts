@@ -70,5 +70,9 @@ export class NavBarComponent implements OnInit {
   LoadProfile(){
     this.router.navigate(['/update-user'])
   }
+
+  AllInactiveFacilities(){
+    this.router.navigate(['/inactive-facilities'])
+  }
   
 }

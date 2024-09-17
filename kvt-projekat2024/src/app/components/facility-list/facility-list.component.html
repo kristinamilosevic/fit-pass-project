@@ -37,7 +37,8 @@
           <a [routerLink]="['/facility-details', facility.id]">{{ facility.name }}</a> ({{ facility.city }}) ({{ facility.totalRating }})
           <button *ngIf="userType === 'MANAGER' || userType === 'ADMIN'" (click)="editFacility(facility.id)">Edit</button>
           <button *ngIf="userType === 'ADMIN'" (click)="deleteFacility(facility.id)">Delete</button>
-      </li>
+          <button *ngIf="userType === 'ADMIN'" (click)="removeManager(facility.id)">Remove Manager</button>
+        </li>
   </ul>
 
   <div *ngIf="facilities.length === 0">

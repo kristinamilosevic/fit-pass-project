@@ -21,4 +21,7 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
                                     @Param("hasWorkDays") Boolean hasWorkDays);
 
 
+    List<Facility> findByActiveFalse();
+
+    List<Facility> findByActiveTrue();
 }

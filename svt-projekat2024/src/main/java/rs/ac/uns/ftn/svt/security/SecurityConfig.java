@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.svt.security;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import rs.ac.uns.ftn.svt.dao.UserDao;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     @Bean

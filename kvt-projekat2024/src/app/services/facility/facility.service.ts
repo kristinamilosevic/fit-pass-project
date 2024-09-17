@@ -55,4 +55,11 @@ export class FacilityService {
     return this.http.put<void>(`${this.baseUrl}/reviews/delete/${reviewId}`, null);
   }
   
+  getInactiveFacilities(): Observable<Facility[]> {
+    return this.http.get<Facility[]>(`${this.apiUrl}/list`);
+  }
+  getUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users`); 
+  }
+  
 }

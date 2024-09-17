@@ -26,12 +26,11 @@ export class LoginComponent {
         next: (token: string) => {
           this.token = token;
           localStorage.setItem('authToken', token);
-          localStorage.setItem('userEmail', this.email); // Store email in localStorage
+          localStorage.setItem('userEmail', this.email);
 
-          // Fetch user role and store it in localStorage
           this.authService.getUserTypeByEmail(this.email).subscribe({
             next: (response) => {
-              localStorage.setItem('userRole', response.userType); // Store role
+              localStorage.setItem('userRole', response.userType); 
               alert('Login successful');
               this.router.navigate(['/facilities']).then(() => {
                 window.location.reload();

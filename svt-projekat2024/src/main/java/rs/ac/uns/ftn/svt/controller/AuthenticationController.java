@@ -41,7 +41,6 @@ public class AuthenticationController {
         System.out.println("Email: " + request.getEmail());
         System.out.println("Password: " + request.getPassword());
 
-        // Provjerite da li korisnik već ima aktivan token
         if (activeTokens.isTokenListedForUser(email)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User is already logged in.");
         }
@@ -52,7 +51,7 @@ public class AuthenticationController {
         final UserDetails user = userDao.findUserByEmail(email);
         if(user != null){
             String token = tokenUtils.generateToken(user);
-            activeTokens.addTokenForUser(email, token); // Dodajte novi token za korisnika
+            activeTokens.addTokenForUser(email, token);
             return ResponseEntity.ok(token);
         }
         return ResponseEntity.status(400).body("Some error!");
@@ -68,7 +67,7 @@ public class AuthenticationController {
         }
 
         jwtToken = authHeader.substring(7);
-        tokenList.listToken(jwtToken); // Token će biti premješten u crnu listu i uklonjen iz aktivnih tokena
+        tokenList.listToken(jwtToken);
         return ResponseEntity.ok("Logged out successfully");
     }
 

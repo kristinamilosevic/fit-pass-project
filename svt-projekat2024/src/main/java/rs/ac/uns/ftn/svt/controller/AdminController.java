@@ -2,6 +2,7 @@ package rs.ac.uns.ftn.svt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.svt.model.AccountRequest;
 import rs.ac.uns.ftn.svt.model.RequestStatus;
@@ -21,6 +22,9 @@ public class AdminController {
     private AccountRequestService accountRequestService;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UserService userService;
 
     @PutMapping("/approve/{id}")
@@ -30,18 +34,17 @@ public class AdminController {
             accountRequest.setStatus(RequestStatus.ACCEPTED);
             accountRequestService.updateAccountRequest(id, accountRequest);
 
-            // Kreirajte korisnika ako zahtev bude odobren
             User user = new User();
             user.setEmail(accountRequest.getEmail());
             user.setAddress(accountRequest.getAddress());
             user.setCreatedAt(LocalDate.now());
-            user.setPassword("defaultPassword"); // Podesite default password, ili generišite slučajni
-            user.setName("Default Name"); // Podesite default ime
-            user.setSurname("Default Surname"); // Podesite default prezime
-            user.setPhoneNumber("000-000-0000"); // Podesite default broj telefona
-            user.setBirthday(LocalDate.now()); // Podesite default datum rođenja
-            user.setCity("Default City"); // Podesite default grad
-            user.setZipCode("00000"); // Podesite default poštanski broj
+            user.setPassword(passwordEncoder.encode("a"));
+            user.setName("User");
+            user.setSurname("Useric");
+            user.setPhoneNumber("000-000-0000");
+            user.setBirthday(LocalDate.now());
+            user.setCity("Your city");
+            user.setZipCode("00000");
             userService.createUser(user);
         }
     }

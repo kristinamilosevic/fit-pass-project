@@ -11,6 +11,9 @@
     <li *ngIf="isAdmin()">
       <button (click)="AllAccountRequests()" class="btn btn-4">All account requests</button>
     </li>
+    <li *ngIf="isAdmin()">
+      <button (click)="AllInactiveFacilities()" class="btn btn-5">All inactive facilities</button>
+    </li>
     <li *ngIf="isLoggedIn">
       <button (click)="LoadProfile()" class="btn btn-5">Profile</button>
     </li>

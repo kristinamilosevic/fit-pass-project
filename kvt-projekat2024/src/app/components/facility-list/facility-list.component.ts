@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Facility } from '../../models/Facility';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -22,7 +22,7 @@ export class FacilityListComponent implements OnInit {
     maxRating: null,
     hasWorkDays: false
   };
-  userType: string | null = null; // To store user type
+  userType: string | null = null; 
 
   constructor(
     private http: HttpClient,
@@ -31,7 +31,7 @@ export class FacilityListComponent implements OnInit {
 
   ngOnInit() {
     this.getAllFacilities();
-    this.userType = localStorage.getItem('userRole'); // Retrieve user type from localStorage
+    this.userType = localStorage.getItem('userRole'); 
   }
 
   getAllFacilities() {
@@ -89,4 +89,27 @@ export class FacilityListComponent implements OnInit {
     this.router.navigate(['/facilities/update', id]);
   }
 
+  removeManager(facilityId: number) {
+    const token = localStorage.getItem('authToken'); 
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    
+    this.http.delete(`http://localhost:8080/api/facilities/deactivate/${facilityId}`, { headers, observe: 'response' })
+      .subscribe({
+        next: (response) => {
+          if (response.status === 204) {
+            alert('Facility deactivated and manager removed.');
+            this.router.navigate(['/facilities']).then(() => {
+              window.location.reload(); 
+            });
+          }
+        },
+        error: (err) => {
+          console.error('Error deactivating facility:', err);
+          alert('Failed to deactivate facility.');
+        }
+      });
+  }
+  
+  
+  
 }

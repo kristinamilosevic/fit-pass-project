@@ -7,8 +7,8 @@ header {
     background-color: #F7E7DC;
     padding: 10px 20px;
     display: flex;
-    justify-content: space-between; /* Razmak između elemenata na krajevima */
-    align-items: center; /* Vertikalno poravnavanje elemenata */
+    justify-content: space-between; 
+    align-items: center; 
 }
 
 header h1 {
