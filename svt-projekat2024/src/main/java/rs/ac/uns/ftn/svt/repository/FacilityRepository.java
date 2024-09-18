@@ -1,5 +1,6 @@
 package rs.ac.uns.ftn.svt.repository;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,4 +25,15 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
     List<Facility> findByActiveFalse();
 
     List<Facility> findByActiveTrue();
+
+    List<Facility> findByCity(String city);
+    @Query("SELECT f FROM Facility f ORDER BY f.totalRating DESC")
+    List<Facility> findTopRatedFacilities(PageRequest pageRequest);
+
+    @Query("SELECT f FROM Facility f WHERE f.id IN (SELECT e.facility.id FROM Exercise e WHERE e.user.id = :userId)")
+    List<Facility> findFacilitiesByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT f FROM Facility f WHERE f.id NOT IN " +
+            "(SELECT e.facility.id FROM Exercise e WHERE e.user.id = :userId)")
+    List<Facility> findUnvisitedFacilitiesByUserId(@Param("userId") Long userId);
 }

@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.ftn.svt.dto.FacilityDTO;
 import rs.ac.uns.ftn.svt.dto.UserDTO;
@@ -126,8 +129,62 @@ public class FacilityController {
             facilityService.deactivateFacilityAndDeleteManages(facilityId);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // 500 Internal Server Error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/my-facilities")
+    public ResponseEntity<List<Facility>> getFacilitiesForLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String loggedInUserEmail = userDetails.getUsername();
+
+        User user = userService.findUserByEmail(loggedInUserEmail);
+
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        String userCity = user.getCity();
+        List<Facility> facilitiesInCity = facilityService.findFacilitiesByCity(userCity);
+
+        return ResponseEntity.ok(facilitiesInCity);
+    }
+
+    @GetMapping("/top-rated")
+    public ResponseEntity<List<FacilityDTO>> getTopRatedFacilities() {
+        List<Facility> topRatedFacilities = facilityService.getTopRatedFacilities(3); // Traži 3 objekta
+        List<FacilityDTO> facilityDTOs = topRatedFacilities.stream()
+                .map(facilityService::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(facilityDTOs);
+    }
+
+    @GetMapping("/by-exercise/{userId}")
+    public ResponseEntity<List<FacilityDTO>> getFacilitiesByUserId(@PathVariable Long userId) {
+        List<Facility> facilities = facilityService.findFacilitiesByUserId(userId);
+        List<FacilityDTO> facilityDTOs = facilities.stream()
+                .map(facilityService::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(facilityDTOs);
+    }
+
+    @GetMapping("/unvisited/{userId}")
+    public ResponseEntity<List<FacilityDTO>> getUnvisitedFacilitiesByUserId(@PathVariable Long userId) {
+        // Pozivamo servis koji će vratiti teretane u kojima korisnik nije bio
+        List<Facility> unvisitedFacilities = facilityService.findUnvisitedFacilitiesByUserId(userId);
+
+        // Konvertujemo Facility entitete u DTO objekte pre slanja odgovora
+        List<FacilityDTO> facilityDTOs = unvisitedFacilities.stream()
+                .map(facilityService::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(facilityDTOs);
+    }
+
 
 }

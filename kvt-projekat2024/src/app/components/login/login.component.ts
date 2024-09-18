@@ -32,7 +32,7 @@ export class LoginComponent {
             next: (response) => {
               localStorage.setItem('userRole', response.userType); 
               alert('Login successful');
-              this.router.navigate(['/facilities']).then(() => {
+              this.router.navigate(['/home-page']).then(() => {
                 window.location.reload();
               });
             },

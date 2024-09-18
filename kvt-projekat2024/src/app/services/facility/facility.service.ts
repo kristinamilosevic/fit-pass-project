@@ -1,6 +1,5 @@
-// src/app/services/facility.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Facility } from '../../models/Facility';
 import { WorkDay } from '../../models/WorkDay';
@@ -61,5 +60,24 @@ export class FacilityService {
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/users`); 
   }
-  
+
+  getFacilitiesForLoggedInUser(): Observable<any> {
+    const token = localStorage.getItem('authToken'); 
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/my-facilities`, { headers });
+  }
+
+  getTopRatedFacilities(): Observable<Facility[]> {
+    return this.http.get<Facility[]>(`${this.apiUrl}/top-rated`);
+  }
+
+  getFacilitiesByUserId(userId: number): Observable<Facility[]> {
+    return this.http.get<Facility[]>(`${this.apiUrl}/by-exercise/${userId}`);
+  }
+
+  getUnvisitedFacilitiesByUserId(userId: number): Observable<Facility[]> {
+    return this.http.get<Facility[]>(`${this.apiUrl}/unvisited/${userId}`);
+  }
 }

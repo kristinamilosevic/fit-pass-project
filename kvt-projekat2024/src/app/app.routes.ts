@@ -12,6 +12,7 @@ import { ExerciseComponent } from './components/exercise/exercise.component';
 import { ReviewComponent } from './components/review/review.component';  
 import { UpdateUserComponent } from './components/update-user/update-user.component';
 import { InactiveFacilitiesComponent } from './components/inactive-facilities/inactive-facilities.component';  
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,6 +28,7 @@ export const routes: Routes = [
   { path: 'review/:id', component: ReviewComponent },
   { path: 'update-user', component: UpdateUserComponent },
   { path: 'inactive-facilities', component: InactiveFacilitiesComponent },
+  { path: 'home-page', component: HomePageComponent },
 ];
 
 

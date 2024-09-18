@@ -26,6 +26,7 @@ export class FacilityComponent implements OnInit {
   email: string | null = null;
   reviews: Review[] = [];
   userType: string | null = null;
+  commentInputVisible: boolean = false; 
 
   constructor(
     private route: ActivatedRoute,
@@ -158,5 +159,9 @@ export class FacilityComponent implements OnInit {
         alert('Error deleting review.');
       }
     });
+  }
+
+  toggleCommentInput(): void {
+    this.commentInputVisible = !this.commentInputVisible; 
   }
 }

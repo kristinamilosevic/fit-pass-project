@@ -1,6 +1,7 @@
 package rs.ac.uns.ftn.svt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rs.ac.uns.ftn.svt.dto.FacilityDTO;
@@ -226,5 +227,21 @@ public class FacilityService {
         facilityRepository.save(facility);
 
         managesRepository.deleteByFacilityId(facilityId);
+    }
+
+    public List<Facility> findFacilitiesByCity(String city) {
+        return facilityRepository.findByCity(city);
+    }
+
+    public List<Facility> getTopRatedFacilities(int limit) {
+        return facilityRepository.findTopRatedFacilities(PageRequest.of(0, limit));
+    }
+
+    public List<Facility> findFacilitiesByUserId(Long userId) {
+        return facilityRepository.findFacilitiesByUserId(userId);
+    }
+
+    public List<Facility> findUnvisitedFacilitiesByUserId(Long userId) {
+        return facilityRepository.findUnvisitedFacilitiesByUserId(userId);
     }
 }

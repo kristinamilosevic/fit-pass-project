@@ -113,4 +113,9 @@ public class UserService {
 
         return dto;
     }
+
+    public User findUserByEmail(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        return userOptional.orElse(null);
+    }
 }
