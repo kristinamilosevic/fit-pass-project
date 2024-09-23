@@ -168,17 +168,14 @@ public class FacilityController {
     public ResponseEntity<List<FacilityDTO>> getFacilitiesByUserId(@PathVariable Long userId) {
         List<Facility> facilities = facilityService.findFacilitiesByUserId(userId);
         List<FacilityDTO> facilityDTOs = facilities.stream()
-                .map(facilityService::convertToDTO)
+                 .map(facilityService::convertToDTO)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(facilityDTOs);
     }
 
     @GetMapping("/unvisited/{userId}")
     public ResponseEntity<List<FacilityDTO>> getUnvisitedFacilitiesByUserId(@PathVariable Long userId) {
-        // Pozivamo servis koji će vratiti teretane u kojima korisnik nije bio
         List<Facility> unvisitedFacilities = facilityService.findUnvisitedFacilitiesByUserId(userId);
-
-        // Konvertujemo Facility entitete u DTO objekte pre slanja odgovora
         List<FacilityDTO> facilityDTOs = unvisitedFacilities.stream()
                 .map(facilityService::convertToDTO)
                 .collect(Collectors.toList());

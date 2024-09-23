@@ -45,6 +45,9 @@
       <p><strong>Rating:</strong> {{ facility.totalRating }}</p>
     </li>
   </ul>
+  <div *ngIf="facilities.length === 0">
+    <p>You still have no visits.</p>
+  </div>
 
   <h2>Facilities you haven't visited yet</h2>
   <ul *ngIf="unvisitedFacilities.length > 0" class="list-group">
