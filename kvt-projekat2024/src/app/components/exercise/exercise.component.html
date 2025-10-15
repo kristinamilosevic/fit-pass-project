@@ -1,0 +1,23 @@
+<div class="schedule-container">
+    <h2>Schedule Visit for Facility: {{ facility?.name }}</h2>
+  
+    <form #scheduleForm="ngForm" (ngSubmit)="submitSchedule(scheduleForm.value)">
+      <div>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" ngModel required>
+      </div>
+  
+      <div>
+        <label for="startTime">Start Time:</label>
+        <input type="time" id="startTime" name="startTime" ngModel required>
+      </div>
+  
+      <div>
+        <label for="endTime">End Time:</label>
+        <input type="time" id="endTime" name="endTime" ngModel required>
+      </div>
+  
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+   

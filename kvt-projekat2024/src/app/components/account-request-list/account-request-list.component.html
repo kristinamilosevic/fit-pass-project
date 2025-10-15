@@ -1,0 +1,14 @@
+<div *ngIf="accountRequests.length > 0">
+  <h2 class="h2">All Account Requests</h2>
+  <ul>
+    <li *ngFor="let request of accountRequests">
+      <p>Email: {{ request.email }}</p>
+      <p>Address: {{ request.address }}</p>
+      <p>Status: {{ request.status }}</p>
+      <button class="btn" (click)="deleteRequest(request.id)">Delete</button>
+    </li>
+  </ul>
+  <div *ngIf="accountRequests.length === 0">
+    <p>No account requests found.</p>
+  </div>
+  

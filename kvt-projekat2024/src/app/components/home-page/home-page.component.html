@@ -1,0 +1,74 @@
+<div class="container">
+    <h2>Facilities from your city</h2>
+  
+    <ul *ngIf="facilities.length > 0" class="list-group">
+      <li *ngFor="let facility of facilities" class="list-group-item">
+        <h5>
+          <a [routerLink]="['/facility-details', facility.id]" class="facility-link">
+            {{ facility.name }}
+          </a>
+        </h5>
+        <p><strong>City:</strong> {{ facility.city }}</p>
+        <p><strong>Address:</strong> {{ facility.address }}</p>
+        <p><strong>Rating:</strong> {{ facility.totalRating }}</p>
+      </li>
+    </ul>
+  
+    <div *ngIf="facilities.length === 0">
+      <p>No available facility in your city.</p>
+    </div>
+  
+    <h2>Top Rated Facilities</h2>
+    <ul *ngIf="topRatedFacilities.length > 0" class="list-group">
+      <li *ngFor="let facility of topRatedFacilities" class="list-group-item">
+        <h5>
+          <a [routerLink]="['/facility-details', facility.id]" class="facility-link">
+            {{ facility.name }}
+          </a>
+        </h5>
+        <p><strong>City:</strong> {{ facility.city }}</p>
+        <p><strong>Address:</strong> {{ facility.address }}</p>
+        <p><strong>Rating:</strong> {{ facility.totalRating }}</p>
+      </li>
+    </ul>
+
+    <h2> You've already been here </h2>
+  <ul *ngIf="userFacilities.length > 0" class="list-group">
+    <li *ngFor="let facility of userFacilities" class="list-group-item">
+      <h5>
+        <a [routerLink]="['/facility-details', facility.id]" class="facility-link">
+          {{ facility.name }}
+        </a>
+      </h5>
+      <p><strong>City:</strong> {{ facility.city }}</p>
+      <p><strong>Address:</strong> {{ facility.address }}</p>
+      <p><strong>Rating:</strong> {{ facility.totalRating }}</p>
+    </li>
+  </ul>
+  <div *ngIf="facilities.length === 0">
+    <p>You still have no visits.</p>
+  </div>
+
+  <h2>Facilities you haven't visited yet</h2>
+  <ul *ngIf="unvisitedFacilities.length > 0" class="list-group">
+    <li *ngFor="let facility of unvisitedFacilities" class="list-group-item">
+      <h5>
+        <a [routerLink]="['/facility-details', facility.id]" class="facility-link">
+          {{ facility.name }}
+        </a>
+      </h5>
+      <p><strong>City:</strong> {{ facility.city }}</p>
+      <p><strong>Address:</strong> {{ facility.address }}</p>
+      <p><strong>Rating:</strong> {{ facility.totalRating }}</p>
+    </li>
+  </ul>
+  
+    <div *ngIf="topRatedFacilities.length === 0">
+      <p>No top rated facilities available.</p>
+    </div>
+  
+    <div class="view-more-container">
+      <a [routerLink]="['/facilities']" class="view-more-button">Explore More</a>
+    </div>
+  </div>
+  

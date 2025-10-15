@@ -1,0 +1,36 @@
+<div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+<table class="table table-striped" *ngIf="inactiveFacilities.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>City</th>
+      <th>Rating</th>
+      <th>Assign Manager</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let facility of inactiveFacilities">
+      <td>{{ facility.id }}</td>
+      <td>{{ facility.name }}</td>
+      <td>{{ facility.description }}</td>
+      <td>{{ facility.city }}</td>
+      <td>{{ facility.totalRating }}</td>
+      <td>
+        <select [(ngModel)]="selectedUser[facility.id]">
+          <option *ngFor="let user of users" [value]="user.id">{{ user.name }} {{ user.surname }}</option>
+        </select>
+      </td>
+      <td>
+        <button (click)="assignManager(facility.id)">Assign</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="inactiveFacilities.length === 0 && !errorMessage">
+  <p>No inactive facilities found.</p>
+</div>
